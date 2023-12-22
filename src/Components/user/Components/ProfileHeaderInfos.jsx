@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Avatar, Badge, Button } from '@mui/material';
-import { CameraAlt as Camera } from '@mui/icons-material';
-import { getDatabase, ref as dbRef, update, onValue } from 'firebase/database';
-import { storage } from '../../../firebase';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { auth } from '../../../firebase';
-import { Link } from 'react-router-dom/cjs/react-router-dom';
-import { useTranslation } from 'react-i18next';
+import React, { useState, useEffect } from "react";
+import { Avatar, Badge, Button } from "@mui/material";
+import { CameraAlt as Camera } from "@mui/icons-material";
+import { getDatabase, ref as dbRef, update, onValue } from "firebase/database";
+import { storage } from "../../../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { auth } from "../../../firebase";
+import { Link } from "react-router-dom/cjs/react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function ProfileHeaderInfos() {
-
   //this check for the user and show his infos
   const [user, setUser] = useState(null);
   const [image, setImage] = useState(null);
@@ -26,10 +25,10 @@ export default function ProfileHeaderInfos() {
       const file = input.files[0];
       if (file) {
         setImage(file);
-        const imageRef = ref(storage, 'users/' + user.uid);
+        const imageRef = ref(storage, "users/" + user.uid);
         const metadata = { contentType: file.type };
         uploadBytes(imageRef, image, metadata).then((snapshot) => {
-          console.log('Uploaded a blob or file!');
+          console.log("Uploaded a blob or file!");
         });
         const imageLink = await getDownloadURL(imageRef);
         //remove old photo
@@ -37,15 +36,15 @@ export default function ProfileHeaderInfos() {
           const db = getDatabase();
           const userDataRef = dbRef(db, `users/${user.uid}`);
           update(userDataRef, {
-            imageUrl: imageLink
-          })
+            imageUrl: imageLink,
+          });
         } catch (error) {
           console.log(error);
         }
       }
     });
     input.click();
-  }
+  };
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -57,7 +56,6 @@ export default function ProfileHeaderInfos() {
           setUser(data);
           console.log(data);
         });
-
       } else {
         // User is signed out
         setUser(null);
@@ -66,16 +64,19 @@ export default function ProfileHeaderInfos() {
     return unsubscribe;
   }, []);
   return (
-    <div className='shadow-md'>
+    <div className="shadow-md">
       <div className="w-full h-[300px] bg-gradient-to-r from-mypalette-1 to-mypalette-2 rounded-t-lg">
         <div className="relative flex justify-center items-center lg:justify-start lg:items-start lg:pl-14 top-40">
           {user ? (
             <>
               <Badge
                 overlap="circular"
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                 badgeContent={
-                  <div onClick={handelCameraClick} className="bg-slate-200 rounded-full p-3 cursor-pointer hover:bg-slate-300 transition-all delay-100 ease-in-out border-8 border-white">
+                  <div
+                    onClick={handelCameraClick}
+                    className="bg-slate-200 rounded-full p-3 cursor-pointer hover:bg-slate-300 transition-all delay-100 ease-in-out border-8 border-white"
+                  >
                     <Camera />
                   </div>
                 }
@@ -84,19 +85,19 @@ export default function ProfileHeaderInfos() {
                   <Avatar
                     src={user.imageUrl}
                     sx={{
-                      width: '200px',
-                      height: '200px',
-                      fontSize: '50px',
-                      border: 'solid 7px white'
+                      width: "200px",
+                      height: "200px",
+                      fontSize: "50px",
+                      border: "solid 7px white",
                     }}
                   />
                 ) : (
                   <Avatar
                     sx={{
-                      width: '200px',
-                      height: '200px',
-                      fontSize: '50px',
-                      border: 'solid 7px white'
+                      width: "200px",
+                      height: "200px",
+                      fontSize: "50px",
+                      border: "solid 7px white",
                     }}
                   >
                     {user.fullname.charAt(0).toUpperCase()}
@@ -112,72 +113,65 @@ export default function ProfileHeaderInfos() {
       {/* name and status */}
       <div>
         <div className="flex flex-col gap-2 pt-20 bg-white py-4 px-10 rounded-b-lg">
-          {
-            user ? (
-              <div id="name">
-                <h1 className="text-3xl font-bold text-center md:text-start">
-                  {user.fullname}
-                </h1>
-                <h1 className="text-xl text-slate-400 text-center md:text-start">
-                  {user.fieldStudy}
-                </h1>
-              </div>
-            ) : (
-              <>Loading ...</>
-            )
-          }
+          {user ? (
+            <div id="name">
+              <h1 className="text-3xl font-bold text-center md:text-start">
+                {user.fullname}
+              </h1>
+              <h1 className="text-xl text-slate-400 text-center md:text-start">
+                {user.fieldStudy}
+              </h1>
+            </div>
+          ) : (
+            <>Loading ...</>
+          )}
           <div className="my-5 w-full">
             <div className="flex-gradient" />
             <div className="flex gap-3 overflow-x-auto">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <Button
                   sx={{
-                    fontWeight: '700'
-                  }}>
-                  <Link to="/profile">
-                    {t('borrows')}
-                  </Link>
+                    fontWeight: "700",
+                  }}
+                >
+                  <Link to="/profile">{t("borrows")}</Link>
                 </Button>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <Button
                   sx={{
-                    fontWeight: '700'
-                  }}>
-                  <Link to="/profile/history">
-                    {t('history')}
-                  </Link>
+                    fontWeight: "700",
+                  }}
+                >
+                  <Link to="/profile/history">{t("history")}</Link>
                 </Button>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <Button
                   sx={{
-                    fontWeight: '700'
-                  }}>
-                  <Link to="/profile/playlists">
-                    PlayLists
-                  </Link>
+                    fontWeight: "700",
+                  }}
+                >
+                  <Link to="/profile/playlists">PlayLists</Link>
                 </Button>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <Button
                   sx={{
-                    fontWeight: '700',
-                    width: 'fit'
-                  }}>
-                  <Link to="/profile/likedbooks">
-                    {t('liked_book')}
-                  </Link>
+                    fontWeight: "700",
+                    width: "fit",
+                  }}
+                >
+                  <Link to="/profile/likedbooks">{t("liked_book")}</Link>
                 </Button>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <Button
                   sx={{
-                    fontWeight: '700'
-                  }}>
-                  <Link to="/profile/settings">
-                    {t('settings')}
-                  </Link>
+                    fontWeight: "700",
+                  }}
+                >
+                  <Link to="/profile/settings">{t("settings")}</Link>
                 </Button>
               </div>
             </div>
@@ -186,5 +180,5 @@ export default function ProfileHeaderInfos() {
         </div>
       </div>
     </div>
-  )
+  );
 }
